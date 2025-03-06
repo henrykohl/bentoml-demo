@@ -5,6 +5,7 @@
 > 原 Github 出處 [BentoML demo repo](https://github.com/entbappy/bentoml-demo/)
 
 - 此 project 實做是依據 **Gitpod** (而非 **Github Codespaces**)
+  > 在 **Gitpod** 開啟 terminal 後，後續實做如下:
 
 * 若不存在，則需先建立 requirements.txt
 
@@ -72,15 +73,39 @@ python --version
 >
 > `bentoml_cmd.txt`
 >
-> > 執行命令: `bentoml serve service.py:service --reload`
+> > 執行命令: `bentoml serve service.py:service --reload` (演 1)
 >
 > `bentofile.yaml` (1:14:29)
 >
 > 執行命令: `bentoml build`
 
-- 補充
+- 關於 " 演 1 "
+
+> 開啟 Browser ，在 Service APIs 中 POST /predict 下的 Request body 輸入
+>
+> > [
+> >
+> > [2,3,4,5]
+> >
+> > ]
+>
+> 按下 Execute 後，在 Response body 中顯示
+>
+> > [
+> >
+> > 2
+> >
+> > ]
+
+# 補充
 
 > Github 用 Gitpod 開啟時，若有 _requirements.txt_ 存在，會直接安裝在工作目錄，但我們希望建立 virtual environment 後，才將 _requirements.txt_ 安裝於其中，因此 BentoML Demo Repo 中預先不含 _requirements.txt_。
+
+- 參 1 [Codespaces in GitHub](https://levelup.gitconnected.com/codespaces-in-github-6457533fc7f1)
+
+- 參 2 [如何使用 GitPod](https://henrykohl-bentomldemo-sry846dwcvs.ws-us118.gitpod.io/)
+
+- 在 **Gitpod** 安裝 conda，主要參考了 `參 1`
 
 # 忽略
 
