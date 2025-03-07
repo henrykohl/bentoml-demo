@@ -97,7 +97,7 @@ python --version
 > >
 > > ]
 
-# 補充
+# 參考/補充
 
 > Github 用 Gitpod 開啟時，若有 _requirements.txt_ 存在，會直接安裝在工作目錄，但我們希望建立 virtual environment 後，才將 _requirements.txt_ 安裝於其中，因此 BentoML Demo Repo 中預先不含 _requirements.txt_。
 
@@ -105,7 +105,15 @@ python --version
 
 - 參 2 [如何使用 GitPod](https://henrykohl-bentomldemo-sry846dwcvs.ws-us118.gitpod.io/)
 
-- 在 **Gitpod** 安裝 conda，主要參考了 `參 1`
+- 補 0 **Gitpod** 安裝 conda，主要參考了 `參 1`
+
+* 補 1
+
+> `bentomldemo.ipynb` 是將此 project 改成用 Colab 運行，但無法成功
+
+- 補 2
+
+> `sklearn-sentiment-analysis.ipynb` 是一個使用 BentoML 的範例，可以成功地在 Colab 上運行
 
 # 忽略
 
