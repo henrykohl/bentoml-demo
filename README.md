@@ -207,20 +207,162 @@ bentoml build
 bentoml list
 ```
 
+# BentoML SageMaker deployment
+
+* [Lecture video](https://www.youtube.com/watch?v=Zci_D4az9FU)
+
+* 執行
+```bash
+conda create -p venv python==3.9 -y
+```
+
+* 建立 `requirements.txt`
+```sh
+bentoctl==0.4.0
+bentoml==1.1.9
+boto3==1.29.0
+numpy==1.26.2
+pydantic==2.5.1
+pydantic_core==2.14.3
+scikit-learn==1.3.2
+```
+
+* 執行
+```bash
+pip install -r requirements.txt
+```
+
+* 建立 `create_model.py`
+```python
+import bentoml
+
+from sklearn import datasets
+from sklearn import svm
+
+iris = datasets.load_iris()
+X, y = iris.data, iris.target
+
+clf = svm.SVC(gamma="scale")
+clf.fit(X, y)
+
+saved_model = bentoml.sklearn.save_model("iris_clf", clf)
+print(saved_model)
+```
+
+* 執行
+```bash
+python create_model.py
+
+bentoml models list
+```
+
+* 建立 `service.py`
+```python
+from typing import Literal
+
+import bentoml
+
+from pydantic import BaseModel
+from bentoml.io import JSON
 
 
+iris_clf_runner = bentoml.sklearn.get("iris_clf:latest").to_runner()
+
+svc = bentoml.Service("iris_classifier", runners=[iris_clf_runner])
+
+class Request(BaseModel):
+    sepal_width: float
+    sepal_length: float
+    petal_width: float
+    petal_length: float
+
+class Response(BaseModel):
+    label: Literal["setosa", "versicolor", "virginica"]
 
 
+@svc.api(input=JSON(pydantic_model=Request), output=JSON(pydantic_model=Response))
+def classify(request: Request) -> Response:
+    input_ = [
+        request.sepal_width,
+        request.sepal_length,
+        request.petal_width,
+        request.petal_length,
+    ]
 
+    label_index = iris_clf_runner.predict.run([input_])[0]
+    label = ["setosa", "versicolor", "virginica"][label_index]
 
+    return Response(label=label)
+```
 
+* 執行
+```bash
+bentoml serve service.py
+```
 
+* 打開 browser 用網址 localhost:3000 在 POST/classify, 按`Try it out` 輸入 [[1,2.3,4.2,1.0]], 按`Execute` 
+> 結果是  1
 
+* 建立 `bentofile.yaml`
+```sh
+service: "service:svc"
+include:
+- "service.py"
+python:
+  packages:
+  - pydantic
+  - scikit-learn
+models:
+- iris_clf:latest
+```
 
+* 執行
+```bash
+bentoml build
+```
 
+* 執行
+```bash
+bentoml list
+```
 
+* Install SageMaker operator -- 執行 (18:37)
+```bash
+bentoctl operator install aws-sagemaker
+```
 
+* 執行
+```bash
+bentoctl init
+```
 
+name: great-iris
+
+operator/name: aws-sagemaker
+
+region: us-east-1
+
+instance_type: m1.t2.medium
+
+initial_instance_count: 1
+
+timeout: 60
+
+enable_data_capture: False
+
+destination_s3_uri: 
+
+initial_sampling_percentage: 1
+
+Do you want to add item to env (y/n): n
+
+filename for deployment_config [deployment_config.yaml]:
+
+* 查看 `deployment_config.yaml`
+
+* 查看 `bentoctl.tfvars`
+
+* 查看 `main.tf`
 
 
 
