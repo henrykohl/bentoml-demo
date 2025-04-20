@@ -210,6 +210,7 @@ bentoml list
 # BentoML SageMaker deployment
 
 * [Lecture video](https://www.youtube.com/watch?v=Zci_D4az9FU)
+> [Lecture code repository](https://github.com/jankrepl/mildlyoverfitted/blob/master/mini_tutorials/bentoml/README.md)
 
 * 執行
 ```bash
@@ -364,7 +365,44 @@ filename for deployment_config [deployment_config.yaml]:
 
 * 查看 `main.tf`
 
+* 執行
+```bash
+bentoctl build -f deployment_config.yaml -b iris_classifier:編號
+```
 
+* 再查看 `bentoctl.tfvars`
+
+* 執行
+```bash
+aws ecr describe-repositories
+```
+
+* 執行
+```bash
+aws ecr list-images --repository-name=great-iris
+```
+
+* 執行
+```bash
+terraform init
+
+terraform plan -var-file=bentoctl.tfvars
+
+terraform apply -var-file=bentoctl.tfvars
+```
+
+
+
+* 執行
+```bash
+terraform destroy -var-file=bentoctl.tfvars
+
+bentoctl destroy
+
+aws sagemaker list-models
+
+aws sagemaker list-endpoints
+```
 
 
 
