@@ -301,8 +301,18 @@ def classify(request: Request) -> Response:
 bentoml serve service.py
 ```
 
-* 打開 browser 用網址 localhost:3000 在 POST/classify, 按`Try it out` 輸入 [[1,2.3,4.2,1.0]], 按`Execute` 
-> 結果是  1
+* 打開 browser 用網址 localhost:3000 在 POST/classify, 按`Try it out` 輸入 
+> { \
+>   "sepal_width": 7, \
+>   "sepal_length": 7, \
+>   "petal_width": 7, \
+>   "petal_length": 7 \
+> } 
+
+* 按`Execute` 結果是  
+> { \
+>   "label": "virginica" \
+> }
 
 * 建立 `bentofile.yaml`
 ```sh
