@@ -214,8 +214,10 @@ bentoml list
 
 * 執行
 ```bash
-conda create -p venv python==3.9 -y
+# conda create -p venv python==3.9 -y 似乎不行
 ```
+
+* 在 **Gitpod** 中不使用 conda environment，直接使用其環境， python --version 為 3.12.9
 
 * 建立 `requirements.txt`
 ```sh
@@ -233,6 +235,8 @@ scikit-learn==1.3.2
 ```bash
 pip install -r requirements.txt
 ```
+
+* 在 **Gitpod**  中，，直接使用其環境， cattrs --version 為 23.1.2
 
 * 建立 `create_model.py`
 ```python
