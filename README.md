@@ -220,7 +220,8 @@ conda create -p venv python==3.9 -y
 * 建立 `requirements.txt`
 ```sh
 bentoctl==0.4.0
-bentoml==1.1.9
+# bentoml==1.1.9 # bentoml build 會出問題
+bentoml==1.4.10
 boto3==1.29.0
 numpy==1.26.2
 pydantic==2.5.1
@@ -375,6 +376,9 @@ filename for deployment_config [deployment_config.yaml]:
 
 * 查看 `main.tf`
 
+* 安裝 `awscli` (Lecture 缺這一步驟)，否則下一步驟 `bentoctl build -f ...` 會出現 
+> `botocore.exceptions.nocredentialserror: unable to locate credentials` 錯誤
+
 * 執行
 ```bash
 bentoctl build -f deployment_config.yaml -b iris_classifier:編號
@@ -392,6 +396,8 @@ aws ecr describe-repositories
 aws ecr list-images --repository-name=great-iris
 ```
 
+* 安裝 `terraform` -- 執行 `brew install terraform`  (Lecture 缺這一步驟)
+
 * 執行
 ```bash
 terraform init
@@ -400,18 +406,20 @@ terraform plan -var-file=bentoctl.tfvars
 
 terraform apply -var-file=bentoctl.tfvars
 ```
-
+> 最後一步驟無法成功，出現 `error creating sagemaker endpoint: resourcelimitexceeded: resource limits for this account have been exceeded.` 錯誤，原因是 AWS 的流量限制，需要跟 AWS 客服做 request.
+>
+> 執行 `bentoctl init` 時，也許調整 **instance_type** 可以解決~~ 
 
 
 * 執行
 ```bash
-terraform destroy -var-file=bentoctl.tfvars
+terraform destroy -var-file=bentoctl.tfvars # 並不會刪除 AWS 中的 repository
 
-bentoctl destroy
+bentoctl destroy # 徹底刪除 AWS 中的 repository
 
-aws sagemaker list-models
+aws sagemaker list-models # 查看
 
-aws sagemaker list-endpoints
+aws sagemaker list-endpoints # 查看
 ```
 
 
