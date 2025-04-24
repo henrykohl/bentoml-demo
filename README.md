@@ -7,14 +7,6 @@
 - 此 project 實做是依據 **Gitpod** (而非 **Github Codespaces**)
   > 在 **Gitpod** 開啟 terminal 後，後續實做如下:
 
-* 若不存在，則需先建立 requirements.txt
-
-```
-scikit-learn
-bentoml==1.0.25
-cattrs==23.1.1
-```
-
 - 安裝 Conda
 
 ```bash
@@ -24,13 +16,13 @@ wget https://repo.anaconda.com/archive/Anaconda3-2020.07-Linux-x86_64.sh
 bash Anaconda3-2020.07-Linux-x86_64.sh
 ```
 
-> 開啟新的 bash shell，檢測 conda 是否安裝成功，若沒有用新的 shell 來執行會出現「bash: conda: command not found」
+* 開啟新的 bash shell，檢測 conda 是否安裝成功，若沒有用新的 shell 來執行會出現「bash: conda: command not found」
 
 ```bash
 conda list
 ```
 
-> 建立 virtual environment
+* 建立 virtual environment
 
 ```bash
 conda create -p env python==3.8 -y
@@ -38,46 +30,117 @@ conda create --name env python==3.8 -y ## 另法
 # conda create -p env python=3.8 -y ## 當啟動 env 後，python 版本依然是最新版，非版本3.8
 ```
 
-> 啟動 env
+* 啟動 env
 
 ```bash
 conda activate env
+
+python --version # 檢查 env 中 python 版本
+```
+* 建立 requirements.txt
+
+```sh
+scikit-learn
+bentoml==1.0.25
+cattrs==23.1.1
 ```
 
-> 檢查 env 中 python 版本
-
+* 安裝 packages: 執行命令
 ```bash
-python --version
-# python -v  ## 不行
+pip install -r requirements.txt
 ```
 
-- Project workflow
+* 建立 `bento_train.py`
+```python
+import bentoml
 
-> 執行命令: `conda activate env` (env 需要先建立)
->
-> `requirements.txt`
->
-> > 執行命令: `pip install -r requirements.txt`
->
-> `bento_train.py`
->
-> > 執行命令: `python bento_train.py`
->
+from sklearn.datasets import load_iris
+from sklearn.neighbors import KNeighborsClassifier
+
+model = KNeighborsClassifier()
+iris = load_iris()
+X = iris.data[:, :4]
+Y = iris.target
+model.fit(X, Y)
+
+bento_model = bentoml.sklearn.save_model('kneighbors', model)
+print(f"Model saved: {bento_model}")
+```
+
+*  訓練模型: 執行命令
+```bash
+python bento_train.py
+```
+
 > `bento_cmd.txt`
->
-> `bento_test.py`
->
-> > 執行命令: `python bento_test.py`
->
-> `service.py` (1:10:18)
->
+
+
+* 建立  `bento_test.py`
+```python
+import bentoml
+
+clf = bentoml.sklearn.get('kneighbors:latest').to_runner()
+clf.init_local()
+print(clf.predict.run([[2,3,4,5]]))
+```
+
+
+* 測試模型: 執行命令
+```bash
+python bento_test.py
+```
+
+
+
+* 建立  `service.py` (1:10:18)
+```python
+import bentoml
+import numpy as np
+from bentoml.io import NumpyNdarray
+
+clf = bentoml.sklearn.get('kneighbors:latest').to_runner()
+
+service = bentoml.Service(
+    "kneighbors", runners=[clf]
+)
+
+# Create an API function
+@service.api(input=NumpyNdarray(), output=NumpyNdarray())
+def predict(input_series: np.ndarray) -> np.ndarray:
+
+    result = clf.predict.run(input_series)
+    
+    return result
+```
+
+* 啟動 serve: 執行命令 (演 1)
+```bash
+bentoml serve service.py:service --reload
+```
+
+
+
 > `bentoml_cmd.txt`
->
-> > 執行命令: `bentoml serve service.py:service --reload` (演 1)
->
-> `bentofile.yaml` (1:14:29)
->
-> 執行命令: `bentoml build`
+
+* 建立 `bentofile.yaml` (1:14:29)
+```yaml
+service: "service.py:service"  # Same as the argument passed to `bentoml serve`
+labels:
+    owner: bentoml-team
+    project: gallery
+include:
+- "*.py"  # A pattern for matching which files to include in the bento
+python:
+    packages:  # Additional pip packages required by the service
+    - scikit-learn
+    - pandas
+```
+
+
+* 模型 build: 執行命令:
+```bash
+bentoml build
+```
 
 - 關於 " 演 1 "
 
