@@ -1,4 +1,4 @@
-# Bentoml-Demo
+# Bentoml-Demo (Notebook E1)
 
 > 原 Lecture 出處 [Model Trainer & Bento ML](https://www.youtube.com/watch?v=Aahc28-f4hc) (57:00--1:23:00)
 >
@@ -137,7 +137,7 @@ python:
 ```
 
 
-* 模型 build: 執行命令:
+* 打包模型的所有 source code: 執行命令:
 ```bash
 bentoml build
 ```
@@ -160,7 +160,7 @@ bentoml build
 > >
 > > ]
 
-# BentoML Tutorial: Build Production Grade AI Applications 
+# BentoML Tutorial: Build Production Grade AI Applications (Notebook E4)
 
 [Lecture video](https://www.youtube.com/watch?v=i_FtfdOKa2M)
 
@@ -270,7 +270,7 @@ bentoml build
 bentoml list
 ```
 
-# BentoML SageMaker deployment
+# BentoML SageMaker deployment (Notebook E5)
 
 * [Lecture video](https://www.youtube.com/watch?v=Zci_D4az9FU)
 > [Lecture code repository](https://github.com/jankrepl/mildlyoverfitted/blob/master/mini_tutorials/bentoml/README.md)
@@ -500,7 +500,8 @@ aws sagemaker list-endpoints # 查看
 
 - 參 2 [如何使用 GitPod](https://henrykohl-bentomldemo-sry846dwcvs.ws-us118.gitpod.io/)
 
-- 補 0 **Gitpod** 安裝 conda，主要參考了 `參 1`
+- 補 0 
+> **Gitpod** 安裝 conda，主要參考了 `參 1`
 
 * 補 1
 
@@ -509,6 +510,9 @@ aws sagemaker list-endpoints # 查看
 - 補 2
 
 > `sklearn-sentiment-analysis.ipynb` 是一個使用 BentoML 的範例，可以成功地在 Colab 上運行
+
+* 補 3
+> `bentomlnotebook.ipynb` 共有 5 個範例，包含此 `README.md` 中的 3 個範例
 
 # 忽略
 
