@@ -37,7 +37,7 @@ conda activate env
 
 python --version # 檢查 env 中 python 版本
 ```
-* 建立 requirements.txt
+* 建立 requirements.txt (安裝以下版本，未能解決 KeyError: 'name' 的問題，詳見 bentomlnotebook)
 
 ```sh
 scikit-learn
