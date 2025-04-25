@@ -72,7 +72,10 @@ print(f"Model saved: {bento_model}")
 python bento_train.py
 ```
 
-> `bento_cmd.txt`
+* 顯示模型: 執行命令
+```bash
+bentoml models list
+```
 
 
 * 建立  `bento_test.py`
@@ -118,10 +121,6 @@ def predict(input_series: np.ndarray) -> np.ndarray:
 bentoml serve service.py:service --reload
 ```
 
-
-
-> `bentoml_cmd.txt`
-
 * 建立 `bentofile.yaml` (1:14:29)
 ```yaml
 service: "service.py:service"  # Same as the argument passed to `bentoml serve`
@@ -159,6 +158,12 @@ bentoml build
 > > 2
 > >
 > > ]
+
+* 顯示已打包模型: 執行命令:
+```bash
+bentoml list
+```
+
 
 # BentoML Tutorial: Build Production Grade AI Applications (Notebook E4)
 
